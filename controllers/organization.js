@@ -50,6 +50,7 @@ function validateRequest(req) {
 }
 
 module.exports = {
+  validateRequest,
   /**
    * Retrieves organizations that fit specified criteria.
    * Values in the schema can be null or their respective data types.
