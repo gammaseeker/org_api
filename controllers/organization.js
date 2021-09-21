@@ -117,6 +117,14 @@ module.exports = {
    */
   createOrganization(req, res) {
     const payload = req.body;
+    if (
+      payload.orgName === null ||
+      payload.startDate === null ||
+      payload.numEmployees === null ||
+      payload.isPublic === null
+    ) {
+      res.status(400).send("Request cannot have null values.");
+    }
     if (!validateRequest(payload)) {
       res
         .status(400)
