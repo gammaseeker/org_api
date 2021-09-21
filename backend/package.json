@@ -25,5 +25,8 @@
     "@types/cors": "^2.8.12",
     "@types/jest": "^27.0.1",
     "@types/pg": "^8.6.1"
+  },
+  "engines": {
+    "node": "14.x"
   }
 }
