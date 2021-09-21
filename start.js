@@ -1,3 +1,4 @@
 "use strict";
 var app = require("./server");
-app.listen(3001);
+var PORT = process.env.PORT || 3001;
+app.listen(PORT);
