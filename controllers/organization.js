@@ -5,6 +5,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOrganization = exports.getOrganizations = exports.validateRequest = void 0;
 var database_1 = __importDefault(require("../database"));
+/**
+ * Validates request schema by ensuring values are legal.
+ * Values can be null or their respective data types.
+ * numEmployees cannot be < 0.
+ * @param req is the request body. Must have:
+ * {
+ *  orgName:        string,
+ *  startDate:      date string in the format "yyyy-mm-dd",
+ *  numEmployees:   int,
+ *  isPublic:       boolean
+ * }
+ * @returns
+ */
 var validateRequest = function (req) {
     var orgName = req.orgName;
     var startDate = new Date(req.startDate);
@@ -37,12 +50,20 @@ var validateRequest = function (req) {
 };
 exports.validateRequest = validateRequest;
 /**
- * Retrieves organizations that fit specified criteria
+ * Retrieves organizations that fit specified criteria.
+ * Values in the schema can be null or their respective data types.
+ * If all values in the schema are null, then the query will return all organizations.
  * @param req schema
  * {
- *
+ *  orgName:        string,
+ *  startDate:      date string in the format "yyyy-mm-dd",
+ *  numEmployees:   int,
+ *  isPublic:       boolean
  * }
  * @param res
+ * 200 - Returns json of queried rows
+ * 400 - Error message
+ * 500 - Error message
  */
 var getOrganizations = function (req, res) {
     var payload = req.body;
@@ -60,7 +81,12 @@ var getOrganizations = function (req, res) {
         var query = "SELECT * FROM organization \n  WHERE ($1::text IS NULL OR OrgName = $1::text)\n  AND ($2::date IS NULL OR StartDate = $2::date) \n  AND ($3::int IS NULL OR NumEmployees = $3::int) \n  AND ($4::boolean IS NULL OR Public = $4::boolean)";
         database_1.default.query(query, values, function (err, results) {
             if (err) {
-                res.status(500).send(err.stack);
+                res
+                    .status(500)
+                    .send({
+                    message: "Server error, contact developer.",
+                    error: err.stack,
+                });
             }
             else {
                 res.status(200).json(results.rows);
@@ -69,6 +95,20 @@ var getOrganizations = function (req, res) {
     }
 };
 exports.getOrganizations = getOrganizations;
+/**
+ * Create an organization. No fields in the schema can be null.
+ * @param req schema
+ * {
+ *  orgName:        string,
+ *  startDate:      date string in the format "yyyy-mm-dd",
+ *  numEmployees:   int,
+ *  isPublic:       boolean
+ * }
+ * @param res
+ * 201 - Success message
+ * 400 - Error message
+ * 500 - Error message
+ */
 var createOrganization = function (req, res) {
     var payload = req.body;
     if (!exports.validateRequest(payload)) {
@@ -85,7 +125,12 @@ var createOrganization = function (req, res) {
         ];
         database_1.default.query("INSERT INTO organization VALUES (DEFAULT, $1, $2, $3, $4)", values, function (err, results) {
             if (err) {
-                res.status(500).send(err.stack);
+                res
+                    .status(500)
+                    .send({
+                    message: "Server error, contact developer.",
+                    error: err.stack,
+                });
             }
             else {
                 res.status(201).send("OK");

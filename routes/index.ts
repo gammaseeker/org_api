@@ -7,9 +7,12 @@ import {
 const router = express.Router();
 
 router.get("/", function (req, res) {
+  /*
   res.send(
     "Run GET /organizations to retrieve organizations based on a criteria. Run POST /organizations to create an organization."
   );
+  */
+  res.render("index");
 });
 router.get("/organizations", getOrganizations);
 
