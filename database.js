@@ -1,25 +1,17 @@
 const pg = require("pg");
 
-let config = {};
+let config = {
+  user: process.env.PG_USER,
+  host: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+};
 if (process.env.NODE_ENV !== "production") {
-  config = {
-    user: "postgres",
-    host: "localhost",
-    database: "orgdb",
-    password: "password",
-    port: "5432",
-    ssl: false,
-  };
+  config.ssl = false;
 } else {
-  config = {
-    user: process.env.PG_USER,
-    host: process.env.PG_HOST,
-    database: process.env.PG_DATABASE,
-    password: process.env.PG_PASSWORD,
-    port: process.env.PG_PORT,
-    ssl: {
-      rejectUnauthorized: false,
-    },
+  config.ssl = {
+    rejectUnauthorized: false,
   };
 }
 // Use pool bc pool can handle concurrent db ops better than client

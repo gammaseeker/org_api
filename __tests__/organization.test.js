@@ -1,3 +1,4 @@
+require("dotenv").config();
 const orgController = require("../controllers/organization");
 const appTestInstance = require("../app");
 const supertest = require("supertest");
