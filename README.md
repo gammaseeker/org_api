@@ -7,12 +7,16 @@ Heroku URL: https://org-api-deploy.herokuapp.com/
 1. Make sure postgreSQL is on your machine (https://www.postgresql.org/download/)
 2. Clone this project
 3. Set up a `.env` file in the root of this project with the following variables
+
+```
    PORT= the port you want node js to run on
    PG_USER= the postgres user
    PG_HOST= the postgres host (localhost if you are developing locally)
    PG_DATABASE= name of the database you're accessing
    PG_PASSWORD= postgres password
    PG_PORT=5432
+```
+
 4. Run `npm install` from your root
 5. To run tests run `npm run test`
 6. To start up the project run `npm start`
